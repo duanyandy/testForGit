@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>TEST2</title>
+	<!--Jquery easyUI导入js文件-->
+	<script type="text/javascript" src="js/JQuery.js"></script>
+   <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>   
+   <!--Jquery easyUI导入css文件-->
+    <link type="text/css" rel="stylesheet" href="easyui/themes/default/easyui.css" />
+	<!--<script type="text/javascript" src="easyui/easyloader.js"></script>-->
+	<!--控制easyUI的icon图标-->
+	<link type="text/css" rel="stylesheet" href="easyui/themes/icon.css" />
+</head>
+<body>
+
+
+<!--1.选项卡-->
+<div id="div_tab" class="easyui-tabs" style="width:600px;height:350px;">
+	<div title="Tab1" style="padding:20px;;">
+		
+		<!--2.分类div-->
+		<div id="div_accordion" class="easyui-accordion" style="width:200px;height:220px;">
+			<div title="accr1" id="acc1" data-options="iconCls:'icon-tip'" style="over-flow:auto;" class="">
+				<h3 style="color:#0099FF;">AccourdionA</h3>
+				<p>part1</p>
+			</div>
+			<div title="accr2" id="acc2" data-options="iconCls:'icon-tip',select:true" style="over-flow:auto;" class="">
+				<h3 style="color:#0099FF;">AccourdionB</h3>
+				<p>part2</p>
+			</div>
+			<div title="accr3" id="acc3" data-options="iconCls:'icon-tip'" style="over-flow:auto;" class="">
+				<h3 style="color:#0099FF;">AccourdionC</h3>
+				<p>part3</p>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			$("#div_accordion").accordion({
+				animate:true,
+				multiple:false
+			});
+		</script>
+		
+		
+	</div>
+	<div title="Tab2" data-options="closable:true" style="overflow:auto;padding:20px;;">
+		选项卡2
+	</div>
+	<div title="Tab3" data-options="iconCls:'icon-reload',closable:true" style="overflow-auto;padding:20px;;">
+		选项卡3
+	</div>
+	
+	
+	<script type="text/javascript">
+		var tabIn=4;
+		$("#div_tab").tabs({
+			border:true,
+			plain:false,
+			tools:[{
+				iconCls:'icon-add',
+				handler:function(){
+					$.messager.prompt('提示','请输入tab内容：',function(body){
+						tabIn++;
+						div_tab_add(body);
+					})
+				
+				}
+			}],
+			onSelect:function(title){
+				//$.messager.alert('',title);
+			},
+			onBeforeClose:function(title,index){
+				var target = this;
+				$.messager.confirm('信息','确认关闭'+title+'这个tab嘛？',function(r){
+					if(r){
+						var opt=$(target).tabs('options');
+						var bc=opt.onBeforeClose;
+						opt.onBeforeClose=function(){};//允许现在关闭
+						$(target).tabs('close',index);
+						opt.onBeforeClose=bc;
+					}
+				});
+				return false;
+			}
+			
+		});
+		
+		
+		function div_tab_add(body){
+			$("#div_tab").tabs('add',{
+			title:'Tab'+tabIn,
+			content:body,
+			closable:true,
+			tools:[{
+				iconCls:'icon-mini-refresh',
+				handler:function(){
+					$.messager.alert('','refresh');
+				}
+			}]
+		});
+		}
+		
+	</script>
+</div>
+
+</body>   
+</html>

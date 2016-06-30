@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" /> 
+    <title>TEST</title>
+	<!--Jquery easyUI导入js文件-->
+	<script type="text/javascript" src="js/JQuery.js"></script>
+   <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>   
+   <!--Jquery easyUI导入css文件-->
+    <link type="text/css" rel="stylesheet" href="easyui/themes/default/easyui.css" />
+	<!--<script type="text/javascript" src="easyui/easyloader.js"></script>-->
+	<!--控制easyUI的icon图标-->
+	<link type="text/css" rel="stylesheet" href="easyui/themes/icon.css" />
+  <!--其他-->
+  <script type="text/javascript">
+	
+  </script>
+</head>
+<body>
+ 
+<!--1.3版开始'data-options'属性可以用来支持HTML5兼容属性名称,以‘,‘做分割-->
+	<!--
+	<div id="p" class="easyui-panel" style="width:300px;padding:10px;height:200px;" title="my panel" 
+	data-options="iconCls:'icon-detail',collapsible:true">
+		this is my panel2!
+		<input class="easyui-combobox" name="language"
+			data-options="
+			
+				valueField:'id',
+				testField:'text',
+				panelHeight:'auto',
+				onSelect:function(record){
+					alert(record.text);
+				}" />
+	</div>
+	-->
+	<!--搜索框-->
+	<input id="input_search" style="width:510px;height:30px;"/>
+	<div id="div_menu" class="" style="width:420px;">
+		<div data-optiopns="
+			name:'all',
+			iconCls:'icon-ok'
+		">
+			全部
+		</div>		
+		<div data-options="name:'标题',selected:true">标题</div>
+		<div data-options="name:'作者'">作者</div>
+	</div>
+	<script type="text/javascript">		
+		$("#input_search").searchbox({			
+			searcher:function(value,name){
+				alert(name+":"+value);
+			},
+			menu:'#div_menu',
+			prompt:'PLEASE INSERT YOUR VALUE'
+		});
+		var m=$("#input_search").searchbox('menu');
+		var item=m.menu('findItem','标题');
+		m.menu('setIncon',{
+			target:item.target,
+			iconCls:'icon-edit'
+		});
+		
+		$("#input_search").searchbox('selectName','标题');
+	</script>
+	
+	<br/>
+	
+
+	
+	<script type="text/javascript">	
+		
+	</script>
+	
+	<div id="div_p" title="myPanel" class="easyui-panel" style="padding:0px;">
+		<!--进度条div-->
+		<div id="div_pro" class="easyui-progressbar" style="width:400px"></div>
+	<!--提示框-->
+	<a id="tip" href="javascript:void(0);" >把鼠标放上来</a>
+	</div>
+	<script type="text/javascript">
+		$("#div_p").panel({
+			width:520,    
+			height:150,    
+			//title: 'My Panel',  
+			collapsible:true,
+			maximizable:true,
+			minimizable:true,
+			closable:true,
+			tools: [{    
+				iconCls:'icon-add',    
+				handler:function(){alert('new')}    
+				},{    
+				iconCls:'icon-save',    
+				handler:function(){alert('save')}    
+			}]
+		});
+		
+		
+		var interval=setInterval(progress,5);
+		$('#div_pro').progressbar({ 
+			value: 0 ,
+			onChange:function(value){
+				if(value==100){
+					//$.messager.alert('','完成');
+				}
+			}
+		}); 
+		function progress(){
+			var value=$("#div_pro").progressbar("getValue");
+			value=value+1;
+			if(value<=100){		
+				$("#div_pro").progressbar('setValue',value);
+			}else{
+				clearInterval(interval);
+			}
+			
+			
+		}
+		
+		$("#tip").tooltip({
+			position:'bittom',
+			content:'<span style="color:#ccc">这是一个提示框</span>',
+			trackMouse:true,
+			onShow:function(){
+				$(this).tooltip('tip').css({
+					backgroundColor:'#666',
+					borderColor:'#666'
+				});
+			}
+		});
+	</script>
+	
+	<br/>
+	<!--放置div-->
+	<div id="div_move" style="width:100px;height:120px;margin:auto auto">	
+		<!--可拖动div-->
+		<div id="title" style="background-color:#ccc">拖动DIV</div>
+	</div>
+
+	<br/>
+	
+	<script type="text/javascript">
+		$("#div_move").draggable({
+			handle:'#title',
+			proxy:function(source){
+				var p=$('<div style="border:3px solid blue;width:80px;height:120px;"></div>');
+				p.html($(source).html()).appendTo('body');
+				return p;
+			},
+			revert:true,
+			cursor:'pointer',
+			deltaY:10,
+			onStopDrag:function(){
+				//alert("停止拖动啦!");
+				//$.messager.alert('提示','停止拖动');
+				$.messager.show({
+					title:'提示',
+					msg:'已停止拖动。<br/>（默认4秒）',
+					showType:'show',
+					timeout:800,
+					style:{
+						top:document.body.scrollTop+document.documentElement.scrollTop
+					}
+				});
+			}
+		});
+		$("#div_move").droppable({
+			accept:'#title',
+			onDragOver:function(e,source){
+				alert(e);
+				alert(source);
+			}
+		});
+	</script>
+	
+	<!--可变大小的div-->
+	<div id="div_size" style="width:300px;border:2px solid #ddd;">
+		<div id="size" style="width:100px;height:100px;border:2px solid #ccc;margin:0 auto;"></div>
+	</div>
+	<script type="text/javascript">
+		$("#div_size").resizable({
+			handles:'e,s',
+			maxWidth:400,
+			onStartResize:function(e){
+				$.messager.alert('提示','改变');
+			}
+		});
+		$("#size").resizable({
+			handles:'e,s',
+			maxWidth:300
+		});
+	</script>
+	
+	
+	
+	<br/>
+	<!--分页div-->
+	<div id="div_page" style="background-color:gray;border:1px solid #ccc">
+	</div>
+	<script type="text/javascript">
+		$("#div_page").pagination({
+			total:773,
+			pageSize:5,
+			pageList:[5,10],
+			pageNumber:2,
+			loading:false,
+			buttons:[{
+				iconCls:'icon-add',
+				handler:function(){
+					$.messager.prompt('新增','请输入新增的数据：',function(r){
+						if(r){
+							$.messager.progress({
+								title:'info',
+								msg:'PLEASE WAIT A MOMENT...',
+								text:'PROGRESS',
+								interval:'300',
+							
+							});
+							setTimeout(function(){
+								$.messager.progress('close');
+								$.messager.show({
+									msg:'新增数据【'+r+'】成功',
+									timeout:2000
+								});
+							},4000);
+							
+						}
+					});
+				}
+			},'-',{
+				iconCls:'icon-save',
+				handler:function(){
+					$.messager.confirm('提示','是否确认保存？',function(r){
+						if(r){
+							$.messager.show({
+								msg:'确认保存了。',
+								timeout:500
+							});
+						}else{
+							$.messager.show({
+								msg:'取消保存了。',
+								timeout:300
+							});
+						}
+					});
+				}
+			}],
+			layout:['list','sep','first','pre','manual','next','last']
+		});
+	</script>
+	
+	</body>
+</html>
