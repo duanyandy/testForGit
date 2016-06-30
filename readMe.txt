@@ -5,4 +5,4 @@ it is new
 add new Line
 Git is free software distributed under the GPL.
 Git has a mutable index called stage.
-a
+aGit tracks changes.
